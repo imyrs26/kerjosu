@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoring Mei</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#eef2ff;
+padding:20px;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+padding:18px 24px;
+background:rgba(255,255,255,0.9);
+border-radius:20px;
+}
+
+.topbar a{
+text-decoration:none;
+color:#4f46e5;
+font-weight:600;
+}
+
+.container{
+max-width:1400px;
+margin:auto;
+}
+
+.form-box{
+background:white;
+padding:25px;
+border-radius:25px;
+margin-bottom:25px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.input-group{
+display:flex;
+flex-wrap:wrap;
+gap:12px;
+}
+
+.input-group input,
+.input-group select{
+flex:1;
+min-width:180px;
+padding:14px;
+border-radius:14px;
+border:1px solid #dbeafe;
+}
+
+.input-group button{
+padding:14px 20px;
+border:none;
+border-radius:14px;
+background:linear-gradient(135deg,#4f46e5,#7c3aed);
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+.danger-btn{
+background:linear-gradient(135deg,#dc2626,#ef4444)!important;
+}
+
+.calendar{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:20px;
+}
+
+.day-card{
+background:white;
+padding:18px;
+border-radius:24px;
+box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+
+.day-card h3{
+display:flex;
+flex-direction:column;
+align-items:flex-start;
+gap:6px;
+
+background:linear-gradient(
+135deg,
+#4338ca,
+#7c3aed
+);
+
+padding:16px 18px;
+border-radius:18px;
+color:white;
+margin-bottom:16px;
+}
+
+.date-title{
+font-size:22px;
+font-weight:700;
+line-height:1.2;
+}
+
+.task-count{
+font-size:14px;
+font-weight:500;
+opacity:.9;
+padding-left:34px;
+}
+
+ul{list-style:none;}
+
+li{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+margin-bottom:10px;
+border-radius:14px;
+background:#f8fafc;
+}
+
+.task-left{
+display:flex;
+gap:10px;
+align-items:center;
+font-size:10px;
+font-weight:500;
+}
+
+.delete-btn{
+background:#ef4444;
+border:none;
+padding:8px 10px;
+border-radius:10px;
+color:white;
+cursor:pointer;
+}
+
+.done{
+text-decoration:line-through;
+opacity:.5;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="topbar">
+<a href="index.html">← Kembali</a>
+<h2>Monitoring Mei</h2>
+</div>
+
+<div class="form-box">
+
+<div class="input-group">
+
+<input type="text" id="taskInput" placeholder="Masukkan pekerjaan...">
+
+<select id="dateSelect"></select>
+
+<button onclick="addTaskSingle()">
+Tambah Per Tanggal
+</button>
+
+<button onclick="addTaskAllDates()">
+Tambah Semua Tanggal
+</button>
+
+<button class="danger-btn" onclick="deleteAllTasks()">
+Hapus Semua List
+</button>
+
+</div>
+
+</div>
+
+<div class="calendar" id="calendar"></div>
+
+</div>
+
+<script>
+
+const calendar = document.getElementById("calendar");
+const dateSelect = document.getElementById("dateSelect");
+
+// ambil nama bulan dari title
+const month = document.title.toLowerCase();
+
+// ambil data dari localStorage per bulan
+let tasks = JSON.parse(
+  localStorage.getItem("tasks_" + month)
+) || {};
+
+// generate tanggal
+for(let i = 1; i <= 31; i++){
+
+  const option = document.createElement("option");
+  option.value = i;
+  option.textContent = "Tanggal " + i;
+  dateSelect.appendChild(option);
+
+  const card = document.createElement("div");
+  card.className = "day-card";
+
+  card.innerHTML = `
+    <h3>
+      <div class="date-title">
+        📅 Tanggal ${i}
+      </div>
+
+      <div class="task-count" id="count-${i}">
+        0/0 Task Done
+      </div>
+    </h3>
+
+    <ul id="list-${i}"></ul>
+  `;
+
+  calendar.appendChild(card);
+}
+
+// tambah per tanggal
+function addTaskSingle(){
+
+  const task =
+    document.getElementById("taskInput").value.trim();
+
+  const date =
+    document.getElementById("dateSelect").value;
+
+  if(task === "") return;
+
+  addTaskToDate(date, task);
+
+  document.getElementById("taskInput").value = "";
+}
+
+// tambah semua tanggal
+function addTaskAllDates(){
+
+  const task =
+    document.getElementById("taskInput").value.trim();
+
+  if(task === "") return;
+
+  for(let i = 1; i <= 31; i++){
+    addTaskToDate(i, task);
+  }
+
+  document.getElementById("taskInput").value = "";
+}
+
+// tambah task (disimpan ke localStorage)
+function addTaskToDate(date, task){
+
+  if(!tasks[date]){
+    tasks[date] = [];
+  }
+
+  tasks[date].push({
+    text: task,
+    done: false
+  });
+
+  saveTasks();
+  renderTasks();
+}
+
+// toggle checklist
+function toggleTask(date, index){
+
+  tasks[date][index].done =
+    !tasks[date][index].done;
+
+  saveTasks();
+  renderTasks();
+}
+
+// hapus task
+function deleteTask(date, index){
+
+  tasks[date].splice(index, 1);
+
+  saveTasks();
+  renderTasks();
+}
+
+// hapus semua
+function deleteAllTasks(){
+
+  if(!confirm("Yakin ingin menghapus semua pekerjaan?")) return;
+
+  tasks = {};
+
+  saveTasks();
+  renderTasks();
+}
+
+// simpan ke localStorage
+function saveTasks(){
+
+  localStorage.setItem(
+    "tasks_" + month,
+    JSON.stringify(tasks)
+  );
+}
+
+// render ulang ke UI
+function renderTasks(){
+
+  document.querySelectorAll("ul")
+    .forEach(ul => ul.innerHTML = "");
+
+  for(let date in tasks){
+
+    tasks[date].forEach((task, index)=>{
+
+      const list =
+        document.getElementById(`list-${date}`);
+
+      const li =
+        document.createElement("li");
+
+      li.innerHTML = `
+        <div class="task-left">
+
+          <input
+            type="checkbox"
+            ${task.done ? "checked" : ""}
+            onchange="toggleTask(${date}, ${index})"
+          >
+
+          <span class="${task.done ? "done" : ""}">
+            ${task.text}
+          </span>
+
+        </div>
+
+        <button
+          class="delete-btn"
+          onclick="deleteTask(${date}, ${index})"
+        >
+          Hapus
+        </button>
+      `;
+
+      list.appendChild(li);
+    });
+
+    updateDateCount(date);
+  }
+
+  // update semua tanggal kosong juga
+  for(let i = 1; i <= 31; i++){
+    if(!tasks[i]){
+      updateDateCount(i);
+    }
+  }
+}
+
+// update jumlah task
+function updateDateCount(date){
+
+  const total =
+    tasks[date] ? tasks[date].length : 0;
+
+  const done =
+    tasks[date]
+      ? tasks[date].filter(t => t.done).length
+      : 0;
+
+  document.getElementById(
+    `count-${date}`
+  ).textContent =
+    `${done}/${total} Task Done`;
+}
+
+// load saat buka halaman
+renderTasks();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login KerjoSu</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+
+  background:
+    radial-gradient(circle at top left,#4338ca 0%,transparent 30%),
+    radial-gradient(circle at bottom right,#7c3aed 0%,transparent 30%),
+    #eef2ff;
+}
+
+/* === LAYOUT === */
+
+.login-wrapper{
+  width:100%;
+  max-width:1100px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  align-items:center;
+}
+
+.login-left h1{
+  font-size:64px;
+  margin-bottom:16px;
+}
+
+.login-left p{
+  color:#475569;
+  font-size:18px;
+}
+
+/* === BOX === */
+
+.login-box{
+  background:rgba(255,255,255,.75);
+  backdrop-filter:blur(15px);
+  border-radius:30px;
+  padding:40px;
+  box-shadow:0 20px 40px rgba(0,0,0,.1);
+}
+
+.login-icon{
+  font-size:40px;
+  text-align:center;
+  margin-bottom:15px;
+}
+
+.login-title{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.login-title h2{
+  margin-bottom:5px;
+}
+
+/* === INPUT === */
+
+.input-group{
+  margin-bottom:15px;
+}
+
+.input-group label{
+  font-size:14px;
+}
+
+.input-group input{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  outline:none;
+}
+
+/* === BUTTON === */
+
+.login-btn{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#4f46e5,#7c3aed);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.signup-btn{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  background:white;
+  color:#4f46e5;
+  margin-top:10px;
+  cursor:pointer;
+}
+
+/* === MODAL === */
+
+.signup-modal{
+  position:fixed;
+  inset:0;
+
+  background:rgba(15,23,42,.55);
+
+  display:none;
+  justify-content:center;
+  align-items:center;
+
+  backdrop-filter:blur(6px);
+
+  z-index:999;
+
+  animation:fadeIn .3s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+.signup-box{
+
+  width:100%;
+  max-width:420px;
+
+  background:rgba(255,255,255,.85);
+
+  backdrop-filter:blur(20px);
+
+  border:1px solid rgba(255,255,255,.4);
+
+  padding:32px;
+
+  border-radius:28px;
+
+  box-shadow:
+    0 25px 50px rgba(15,23,42,.25),
+    inset 0 1px 0 rgba(255,255,255,.6);
+
+  animation:scaleIn .25s ease;
+}
+
+@keyframes scaleIn{
+  from{
+    transform:scale(.9);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.signup-box h3{
+
+  text-align:center;
+
+  font-size:24px;
+
+  margin-bottom:20px;
+
+  color:#111827;
+}
+
+.signup-box input{
+
+  width:100%;
+
+  padding:14px 16px;
+
+  margin-bottom:12px;
+
+  border-radius:16px;
+
+  border:1px solid #e2e8f0;
+
+  background:#f8fafc;
+
+  outline:none;
+
+  transition:.25s ease;
+}
+
+.signup-box input:focus{
+
+  border-color:#6366f1;
+
+  box-shadow:
+    0 0 0 4px rgba(99,102,241,.12);
+}
+
+.signup-box button{
+
+  width:100%;
+
+  padding:14px;
+
+  border:none;
+
+  border-radius:16px;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  margin-top:8px;
+
+  transition:.25s ease;
+}
+
+/* tombol daftar */
+.signup-box button:first-of-type{
+
+  background:
+    linear-gradient(
+      135deg,
+      #4f46e5,
+      #7c3aed
+    );
+
+  color:white;
+}
+
+.signup-box button:first-of-type:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 15px 25px rgba(79,70,229,.25);
+}
+
+/* tombol tutup */
+.signup-box button:last-of-type{
+
+  background:
+    linear-gradient(
+      135deg,
+      #ef4444,
+      #dc2626
+    );
+
+  color:white;
+}
+
+.signup-box button:last-of-type:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 15px 25px rgba(239,68,68,.25);
+}
+
+.error{
+  text-align:center;
+  margin-top:10px;
+  color:red;
+  font-size:14px;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .login-wrapper{
+    grid-template-columns:1fr;
+  }
+
+  .login-left{
+    text-align:center;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- MODAL SIGNUP -->
+<div class="signup-modal" id="signupModal">
+  <div class="signup-box">
+    <h3>Buat Account</h3>
+
+    <input type="text" id="newUsername" placeholder="Username">
+    <input type="password" id="newPassword" placeholder="Password">
+
+    <button onclick="signup()">Daftar</button>
+    <button onclick="closeSignup()">Tutup</button>
+  </div>
+</div>
+
+<div class="login-wrapper">
+
+  <div class="login-left">
+    <h1>KerjoSu!</h1>
+    <p>Kelola pekerjaanmu lebih rapi dan terpantau.</p>
+  </div>
+
+  <div class="login-box">
+
+    <div class="login-icon">🔐</div>
+
+    <div class="login-title">
+      <h2>Login</h2>
+      <p>Masuk untuk melanjutkan</p>
+    </div>
+
+    <div class="input-group">
+      <label>Username</label>
+      <input type="text" id="username">
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" id="password" onkeypress="handleEnter(event)">
+    </div>
+
+    <button class="login-btn" onclick="login()">Login</button>
+    <button class="signup-btn" onclick="showSignup()">Sign Up</button>
+
+    <div class="error" id="errorText"></div>
+
+  </div>
+
+</div>
+
+<script>
+
+/* AUTO REDIRECT kalau sudah login */
+if(localStorage.getItem("isLoggedIn") === "true"){
+  window.location.href = "index.html";
+}
+
+/* DEFAULT ACCOUNT (kalau belum ada) */
+if(!localStorage.getItem("username")){
+  localStorage.setItem("username","admin");
+  localStorage.setItem("password","12345");
+}
+
+/* LOGIN */
+function login(){
+
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const errorText = document.getElementById("errorText");
+
+  const savedUser = localStorage.getItem("username");
+  const savedPass = localStorage.getItem("password");
+
+  if(username === savedUser && password === savedPass){
+
+    localStorage.setItem("isLoggedIn","true");
+    window.location.href = "index.html";
+
+  }else{
+    errorText.textContent = "Username atau password salah";
+  }
+}
+
+/* ENTER KEY LOGIN */
+function handleEnter(e){
+  if(e.key === "Enter"){
+    login();
+  }
+}
+
+/* SIGNUP */
+function signup(){
+
+  const username = document.getElementById("newUsername").value.trim();
+  const password = document.getElementById("newPassword").value.trim();
+
+  if(username === "" || password === ""){
+    alert("Isi semua data");
+    return;
+  }
+
+  localStorage.setItem("username", username);
+  localStorage.setItem("password", password);
+
+  alert("Akun berhasil dibuat!");
+  closeSignup();
+}
+
+/* MODAL */
+function showSignup(){
+  document.getElementById("signupModal").style.display="flex";
+}
+
+function closeSignup(){
+  document.getElementById("signupModal").style.display="none";
+}
+
+</script>
+
+</body>
+</html>

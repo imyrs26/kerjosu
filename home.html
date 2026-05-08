@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoring Kerjaan</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:
+    radial-gradient(circle at top left,#312e81 0%,transparent 25%),
+    radial-gradient(circle at bottom right,#7c3aed 0%,transparent 25%),
+    #eef2ff;
+  padding:20px;
+}
+
+.container{
+  width:100%;
+  max-width:1200px;
+}
+
+.title{
+  text-align:center;
+  margin-bottom:40px;
+}
+
+.title h1{
+  font-size:52px;
+  color:#111827;
+  margin-bottom:10px;
+}
+
+.title p{
+  color:#475569;
+}
+
+.month-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:24px;
+  justify-content:center;
+}
+
+.month-card:nth-child(11){
+  grid-column:2;
+}
+
+.month-card:nth-child(12){
+  grid-column:3;
+}
+
+.month-card{
+  background:rgba(255,255,255,0.8);
+  backdrop-filter:blur(12px);
+  border-radius:28px;
+  padding:35px 20px;
+  text-align:center;
+  text-decoration:none;
+  color:#111827;
+  transition:0.3s ease;
+  box-shadow:0 10px 30px rgba(15,23,42,0.08);
+}
+
+.logout-card{
+
+  cursor:pointer;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ef4444,
+      #dc2626
+    );
+
+  color:white;
+}
+
+.logout-card:hover{
+
+  transform:
+    translateY(-6px)
+    scale(1.02);
+
+  box-shadow:
+    0 20px 40px rgba(239,68,68,.25);
+}
+
+.month-card:hover{
+  transform:translateY(-6px) scale(1.02);
+}
+
+.month-icon{
+  font-size:50px;
+  margin-bottom:16px;
+}
+
+.month-name{
+  font-size:22px;
+  font-weight:700;
+}
+</style>
+</head>
+
+<script>
+
+function logout(){
+
+  localStorage.removeItem(
+    "isLoggedIn"
+  );
+
+  window.location.href =
+    "login.html";
+}
+
+</script>
+
+<body>
+  
+<script>
+if(localStorage.getItem("isLoggedIn") !== "true"){
+  window.location.href = "login.html";
+}
+</script>
+
+<div class="container">
+
+<div class="title">
+<h1>KerjoSu!</h1>
+<p>Pilih bulan untuk membuka daftar pekerjaan</p>
+</div>
+
+<div class="month-grid">
+
+<a class="month-card" href="januari.html">
+<div class="month-icon">📅</div>
+<div class="month-name">Januari</div>
+</a>
+
+<a class="month-card" href="februari.html">
+<div class="month-icon">📘</div>
+<div class="month-name">Februari</div>
+</a>
+
+<a class="month-card" href="maret.html">
+<div class="month-icon">📗</div>
+<div class="month-name">Maret</div>
+</a>
+
+<a class="month-card" href="april.html">
+<div class="month-icon">🌸</div>
+<div class="month-name">April</div>
+</a>
+
+<a class="month-card" href="mei.html">
+<div class="month-icon">☀️</div>
+<div class="month-name">Mei</div>
+</a>
+
+<a class="month-card" href="juni.html">
+<div class="month-icon">🌤️</div>
+<div class="month-name">Juni</div>
+</a>
+
+<a class="month-card" href="juli.html">
+<div class="month-icon">🔥</div>
+<div class="month-name">Juli</div>
+</a>
+
+<a class="month-card" href="agustus.html">
+<div class="month-icon">🇮🇩</div>
+<div class="month-name">Agustus</div>
+</a>
+
+<a class="month-card" href="september.html">
+<div class="month-icon">🍂</div>
+<div class="month-name">September</div>
+</a>
+
+<a class="month-card" href="oktober.html">
+<div class="month-icon">🎃</div>
+<div class="month-name">Oktober</div>
+</a>
+
+<a class="month-card" href="november.html">
+<div class="month-icon">🌧️</div>
+<div class="month-name">November</div>
+</a>
+
+<a class="month-card" href="desember.html">
+<div class="month-icon">🎄</div>
+<div class="month-name">Desember</div>
+</a>
+
+<div class="month-card logout-card" onclick="logout()">
+
+  <div class="month-icon">
+    🚪
+  </div>
+
+  <div class="month-name">
+    Logout
+  </div>
+
+</div>
+
+</div>
+</div>
+</body>
+</html>
